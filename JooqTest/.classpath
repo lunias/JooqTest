@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
+	<classpathentry kind="lib" path="lib/h2-1.3.168.jar"/>
+	<classpathentry kind="lib" path="lib/jooq-2.6.0.jar"/>
+	<classpathentry kind="lib" path="lib/logback-classic-1.0.7.jar"/>
+	<classpathentry kind="lib" path="lib/logback-core-1.0.7.jar"/>
+	<classpathentry kind="lib" path="lib/slf4j-api-1.7.2.jar"/>
+	<classpathentry kind="lib" path="lib/jooq-codegen-2.6.0.jar" sourcepath="C:/Users/eanderson/.m2/repository/org/jooq/jooq-codegen/2.6.0/jooq-codegen-2.6.0-sources.jar"/>
+	<classpathentry kind="lib" path="lib/jooq-meta-2.6.0.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
