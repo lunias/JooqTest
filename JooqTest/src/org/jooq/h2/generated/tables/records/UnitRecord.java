@@ -11,7 +11,7 @@ package org.jooq.h2.generated.tables.records;
 @java.lang.SuppressWarnings("all")
 public class UnitRecord extends org.jooq.impl.UpdatableRecordImpl<org.jooq.h2.generated.tables.records.UnitRecord> {
 
-	private static final long serialVersionUID = 406237992;
+	private static final long serialVersionUID = 1177665194;
 
 	/**
 	 * The table column <code>PUBLIC.UNIT.ID</code>
@@ -46,45 +46,31 @@ public class UnitRecord extends org.jooq.impl.UpdatableRecordImpl<org.jooq.h2.ge
 	}
 
 	/**
-	 * The table column <code>PUBLIC.UNIT.STR</code>
+	 * The table column <code>PUBLIC.UNIT.TYPE</code>
 	 */
-	public void setStr(java.lang.Byte value) {
-		setValue(org.jooq.h2.generated.tables.Unit.UNIT.STR, value);
+	public void setType(java.lang.Byte value) {
+		setValue(org.jooq.h2.generated.tables.Unit.UNIT.TYPE, value);
 	}
 
 	/**
-	 * The table column <code>PUBLIC.UNIT.STR</code>
+	 * The table column <code>PUBLIC.UNIT.TYPE</code>
 	 */
-	public java.lang.Byte getStr() {
-		return getValue(org.jooq.h2.generated.tables.Unit.UNIT.STR);
+	public java.lang.Byte getType() {
+		return getValue(org.jooq.h2.generated.tables.Unit.UNIT.TYPE);
 	}
 
 	/**
-	 * The table column <code>PUBLIC.UNIT.MOV</code>
+	 * The table column <code>PUBLIC.UNIT.POINT</code>
 	 */
-	public void setMov(java.lang.Byte value) {
-		setValue(org.jooq.h2.generated.tables.Unit.UNIT.MOV, value);
+	public void setPoint(java.lang.Byte value) {
+		setValue(org.jooq.h2.generated.tables.Unit.UNIT.POINT, value);
 	}
 
 	/**
-	 * The table column <code>PUBLIC.UNIT.MOV</code>
+	 * The table column <code>PUBLIC.UNIT.POINT</code>
 	 */
-	public java.lang.Byte getMov() {
-		return getValue(org.jooq.h2.generated.tables.Unit.UNIT.MOV);
-	}
-
-	/**
-	 * The table column <code>PUBLIC.UNIT.POW</code>
-	 */
-	public void setPow(java.lang.Byte value) {
-		setValue(org.jooq.h2.generated.tables.Unit.UNIT.POW, value);
-	}
-
-	/**
-	 * The table column <code>PUBLIC.UNIT.POW</code>
-	 */
-	public java.lang.Byte getPow() {
-		return getValue(org.jooq.h2.generated.tables.Unit.UNIT.POW);
+	public java.lang.Byte getPoint() {
+		return getValue(org.jooq.h2.generated.tables.Unit.UNIT.POINT);
 	}
 
 	/**

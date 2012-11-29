@@ -11,7 +11,7 @@ package org.jooq.h2.generated.tables;
 @java.lang.SuppressWarnings("all")
 public class Unit extends org.jooq.impl.UpdatableTableImpl<org.jooq.h2.generated.tables.records.UnitRecord> {
 
-	private static final long serialVersionUID = 832569281;
+	private static final long serialVersionUID = 172731854;
 
 	/**
 	 * The singleton instance of PUBLIC.UNIT
@@ -39,19 +39,14 @@ public class Unit extends org.jooq.impl.UpdatableTableImpl<org.jooq.h2.generated
 	public final org.jooq.TableField<org.jooq.h2.generated.tables.records.UnitRecord, java.lang.String> NAME = createField("NAME", org.jooq.impl.SQLDataType.VARCHAR, this);
 
 	/**
-	 * The table column <code>PUBLIC.UNIT.STR</code>
+	 * The table column <code>PUBLIC.UNIT.TYPE</code>
 	 */
-	public final org.jooq.TableField<org.jooq.h2.generated.tables.records.UnitRecord, java.lang.Byte> STR = createField("STR", org.jooq.impl.SQLDataType.TINYINT, this);
+	public final org.jooq.TableField<org.jooq.h2.generated.tables.records.UnitRecord, java.lang.Byte> TYPE = createField("TYPE", org.jooq.impl.SQLDataType.TINYINT, this);
 
 	/**
-	 * The table column <code>PUBLIC.UNIT.MOV</code>
+	 * The table column <code>PUBLIC.UNIT.POINT</code>
 	 */
-	public final org.jooq.TableField<org.jooq.h2.generated.tables.records.UnitRecord, java.lang.Byte> MOV = createField("MOV", org.jooq.impl.SQLDataType.TINYINT, this);
-
-	/**
-	 * The table column <code>PUBLIC.UNIT.POW</code>
-	 */
-	public final org.jooq.TableField<org.jooq.h2.generated.tables.records.UnitRecord, java.lang.Byte> POW = createField("POW", org.jooq.impl.SQLDataType.TINYINT, this);
+	public final org.jooq.TableField<org.jooq.h2.generated.tables.records.UnitRecord, java.lang.Byte> POINT = createField("POINT", org.jooq.impl.SQLDataType.TINYINT, this);
 
 	public Unit() {
 		super("UNIT", org.jooq.h2.generated.Public.PUBLIC);

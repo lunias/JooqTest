@@ -11,7 +11,7 @@ package org.jooq.h2.generated;
 @java.lang.SuppressWarnings("all")
 public class Public extends org.jooq.impl.SchemaImpl {
 
-	private static final long serialVersionUID = 52863748;
+	private static final long serialVersionUID = -1623429618;
 
 	/**
 	 * The singleton instance of PUBLIC
@@ -27,11 +27,17 @@ public class Public extends org.jooq.impl.SchemaImpl {
 
 	@Override
 	public final java.util.List<org.jooq.Sequence<?>> getSequences() {
-		return java.util.Arrays.<org.jooq.Sequence<?>>asList(org.jooq.h2.generated.Sequences.SYSTEM_SEQUENCE_1880BC8C_4EC4_46E7_8B87_44684C2551AA);
+		return java.util.Arrays.<org.jooq.Sequence<?>>asList(
+			org.jooq.h2.generated.Sequences.SYSTEM_SEQUENCE_6C0353CD_2F78_4475_835E_DCBE68501B97,
+			org.jooq.h2.generated.Sequences.SYSTEM_SEQUENCE_93D4B417_6744_402D_9682_DE7061AAEEB1,
+			org.jooq.h2.generated.Sequences.SYSTEM_SEQUENCE_E0F3465C_6ABD_41F5_BE17_BED2EA5E8EF3);
 	}
 
 	@Override
 	public final java.util.List<org.jooq.Table<?>> getTables() {
-		return java.util.Arrays.<org.jooq.Table<?>>asList(org.jooq.h2.generated.tables.Unit.UNIT);
+		return java.util.Arrays.<org.jooq.Table<?>>asList(
+			org.jooq.h2.generated.tables.Faction.FACTION,
+			org.jooq.h2.generated.tables.Unit.UNIT,
+			org.jooq.h2.generated.tables.Type.TYPE);
 	}
 }

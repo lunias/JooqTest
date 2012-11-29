@@ -14,9 +14,19 @@ package org.jooq.h2.generated;
 public final class Tables {
 
 	/**
+	 * The table PUBLIC.FACTION
+	 */
+	public static final org.jooq.h2.generated.tables.Faction FACTION = org.jooq.h2.generated.tables.Faction.FACTION;
+
+	/**
 	 * The table PUBLIC.UNIT
 	 */
 	public static final org.jooq.h2.generated.tables.Unit UNIT = org.jooq.h2.generated.tables.Unit.UNIT;
+
+	/**
+	 * The table PUBLIC.TYPE
+	 */
+	public static final org.jooq.h2.generated.tables.Type TYPE = org.jooq.h2.generated.tables.Type.TYPE;
 
 	/**
 	 * No instances

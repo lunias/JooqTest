@@ -15,10 +15,14 @@ package org.jooq.h2.generated;
 public class Keys {
 
 	// IDENTITY definitions
+	public static final org.jooq.Identity<org.jooq.h2.generated.tables.records.FactionRecord, java.lang.Integer> IDENTITY_FACTION = Identities0.IDENTITY_FACTION;
 	public static final org.jooq.Identity<org.jooq.h2.generated.tables.records.UnitRecord, java.lang.Integer> IDENTITY_UNIT = Identities0.IDENTITY_UNIT;
+	public static final org.jooq.Identity<org.jooq.h2.generated.tables.records.TypeRecord, java.lang.Integer> IDENTITY_TYPE = Identities0.IDENTITY_TYPE;
 
 	// UNIQUE and PRIMARY KEY definitions
+	public static final org.jooq.UniqueKey<org.jooq.h2.generated.tables.records.FactionRecord> CONSTRAINT_E = UniqueKeys0.CONSTRAINT_E;
 	public static final org.jooq.UniqueKey<org.jooq.h2.generated.tables.records.UnitRecord> CONSTRAINT_2 = UniqueKeys0.CONSTRAINT_2;
+	public static final org.jooq.UniqueKey<org.jooq.h2.generated.tables.records.TypeRecord> CONSTRAINT_27 = UniqueKeys0.CONSTRAINT_27;
 
 	// FOREIGN KEY definitions
 
@@ -29,11 +33,15 @@ public class Keys {
 
 	@SuppressWarnings("hiding")
 	private static class Identities0 extends org.jooq.impl.AbstractKeys {
+		public static org.jooq.Identity<org.jooq.h2.generated.tables.records.FactionRecord, java.lang.Integer> IDENTITY_FACTION = createIdentity(org.jooq.h2.generated.tables.Faction.FACTION, org.jooq.h2.generated.tables.Faction.FACTION.ID);
 		public static org.jooq.Identity<org.jooq.h2.generated.tables.records.UnitRecord, java.lang.Integer> IDENTITY_UNIT = createIdentity(org.jooq.h2.generated.tables.Unit.UNIT, org.jooq.h2.generated.tables.Unit.UNIT.ID);
+		public static org.jooq.Identity<org.jooq.h2.generated.tables.records.TypeRecord, java.lang.Integer> IDENTITY_TYPE = createIdentity(org.jooq.h2.generated.tables.Type.TYPE, org.jooq.h2.generated.tables.Type.TYPE.ID);
 	}
 
 	@SuppressWarnings({"hiding", "unchecked"})
 	private static class UniqueKeys0 extends org.jooq.impl.AbstractKeys {
+		public static final org.jooq.UniqueKey<org.jooq.h2.generated.tables.records.FactionRecord> CONSTRAINT_E = createUniqueKey(org.jooq.h2.generated.tables.Faction.FACTION, org.jooq.h2.generated.tables.Faction.FACTION.ID);
 		public static final org.jooq.UniqueKey<org.jooq.h2.generated.tables.records.UnitRecord> CONSTRAINT_2 = createUniqueKey(org.jooq.h2.generated.tables.Unit.UNIT, org.jooq.h2.generated.tables.Unit.UNIT.ID);
+		public static final org.jooq.UniqueKey<org.jooq.h2.generated.tables.records.TypeRecord> CONSTRAINT_27 = createUniqueKey(org.jooq.h2.generated.tables.Type.TYPE, org.jooq.h2.generated.tables.Type.TYPE.ID);
 	}
 }
