@@ -39,6 +39,7 @@ public class UnitCell extends ListCell<Unit> {
 	
 	Node createUnitText() {
 		String unitName = unit.getName();
+		int pointValue = unit.getPointValue();
 		
 		FlowPane flowPane = FlowPaneBuilder.create()
 				.hgap(0)
@@ -46,7 +47,7 @@ public class UnitCell extends ListCell<Unit> {
 				.build();
 		flowPane.setPrefWidth(listView.getScene().getWindow().getWidth() - 100);
 		
-		Node wordNode = new Label(unitName);
+		Node wordNode = new Label(unitName + " (" + pointValue + ")");		
 		
 		flowPane.getChildren().add(wordNode);
 		return flowPane;		

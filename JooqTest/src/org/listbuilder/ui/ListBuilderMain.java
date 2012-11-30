@@ -20,6 +20,7 @@ import javafx.scene.layout.BorderPaneBuilder;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
+import org.listbuilder.common.Database;
 import org.listbuilder.model.ListBuilderModel;
 import org.listbuilder.model.Unit;
 
@@ -29,7 +30,7 @@ public class ListBuilderMain extends Application {
 
 	MenuItem fileMenu;
 	MenuItem helpMenu;
-	
+
 	public ListView listView;
 
 	public static void main(String[] args) {
@@ -51,7 +52,7 @@ public class ListBuilderMain extends Application {
 		stage.setScene(scene);
 		stage.setTitle("List Builder");
 		stage.show();
-		
+
 		ListBuilderModel.instance.unitSearchByName("");
 		listView.getSelectionModel().select(-1);
 	}
@@ -70,9 +71,15 @@ public class ListBuilderMain extends Application {
 								.onAction(new EventHandler<ActionEvent>() {
 									@Override
 									public void handle(ActionEvent e) {
+										Database.dispose();
 										Platform.exit();
 									}
 								}).build()).build(),
+						MenuBuilder
+								.create()
+								.text("Options")
+								.items(MenuItemBuilder.create().text("Sorting")
+										.build()).build(),
 						MenuBuilder
 								.create()
 								.text("Help")
@@ -80,13 +87,12 @@ public class ListBuilderMain extends Application {
 										.build()).build()).build();
 		return menuBar;
 	}
-	
+
 	private Node createListView() {
 		listView = ListViewBuilder.create()
-				.items(ListBuilderModel.instance.allUnits)
-				.editable(false)
+				.items(ListBuilderModel.instance.allUnits).editable(false)
 				.build();
-		
+
 		listView.setCellFactory(new Callback<ListView<Unit>, ListCell<Unit>>() {
 			@Override
 			public ListCell<Unit> call(ListView<Unit> list) {
@@ -95,7 +101,7 @@ public class ListBuilderMain extends Application {
 				return unitCell;
 			}
 		});
-		
+
 		return listView;
 	}
 
