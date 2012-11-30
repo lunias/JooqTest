@@ -16,16 +16,16 @@ import org.listbuilder.common.Database;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ListBuilderModel {
+public class UnitListModel {
 
-	public static ListBuilderModel instance = new ListBuilderModel();
+	public static UnitListModel instance = new UnitListModel();
 	
-	public ObservableList allUnits = FXCollections.observableArrayList();
+	public ObservableList<Unit> allUnits = FXCollections.<Unit>observableArrayList();
 	
-	public static final Logger LOG = LoggerFactory.getLogger(ListBuilderModel.class);
+	public static final Logger LOG = LoggerFactory.getLogger(UnitListModel.class);
 	
-	public ListBuilderModel() {
-		allUnits.setAll(FXCollections.observableArrayList());				
+	public UnitListModel() {
+		allUnits.setAll(FXCollections.<Unit>observableArrayList());				
 	}
 
 	public void unitSearchByName(final String searchTerm) {		
@@ -44,7 +44,7 @@ public class ListBuilderModel {
 				result = db.selectFrom(UNIT).where(UNIT.NAME.like("%" + searchTerm + "%")).fetch();
 			}
 			
-			ObservableList resultUnits = FXCollections.observableArrayList();
+			ObservableList<Unit> resultUnits = FXCollections.<Unit>observableArrayList();
 			
 			for (UnitRecord unit : result) {
 				resultUnits.add(new Unit(unit));

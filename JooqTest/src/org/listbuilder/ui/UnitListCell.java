@@ -10,9 +10,9 @@ import javafx.scene.layout.HBoxBuilder;
 
 import org.listbuilder.model.Unit;
 
-public class UnitCell extends ListCell<Unit> {
+public class UnitListCell extends ListCell<Unit> {
 
-	ListView listView;
+	ListView<Unit> listView;
 	Node unitTextNode;
 	Unit unit;
 	
