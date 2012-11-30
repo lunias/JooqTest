@@ -45,7 +45,7 @@ public class UnitListCell extends ListCell<Unit> {
 				.hgap(0)
 				.vgap(0)
 				.build();
-		flowPane.setPrefWidth(listView.getScene().getWindow().getWidth() - 100);
+		//flowPane.setPrefWidth(listView.getScene().getWindow().getWidth() - 100);
 		
 		Node wordNode = new Label(unitName + " (" + pointValue + ")");		
 		
