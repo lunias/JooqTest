@@ -43,7 +43,7 @@ public class Database {
 			ResultSet rs = conn.getMetaData().getTables(null, null, "UNIT", null);
 			return rs.first();
 		} catch (SQLException sqle) {
-			LOG.error("Could not check database; connection failed" + sqle);
+			LOG.error("Could not check database; connection failed", sqle);
 		} finally {
 			if (conn != null) {
 				try {
@@ -53,7 +53,7 @@ public class Database {
 				}
 			}
 		}
-		return false;
+		return true;
 	}
 
 	public static void resetDatabase() {
@@ -67,7 +67,7 @@ public class Database {
 				LOG.error("Could not reset database; init script not found", nfe);
 			}
 		} catch (SQLException sqle) {
-			LOG.error("Could not reset database; connection failed" + sqle);
+			LOG.error("Could not reset database; connection failed", sqle);
 		} finally {
 			if (conn != null) {
 				try {

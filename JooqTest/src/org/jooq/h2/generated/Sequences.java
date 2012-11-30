@@ -14,19 +14,19 @@ package org.jooq.h2.generated;
 public final class Sequences {
 
 	/**
-	 * The sequence PUBLIC.SYSTEM_SEQUENCE_6C0353CD_2F78_4475_835E_DCBE68501B97
+	 * The sequence PUBLIC.SYSTEM_SEQUENCE_1DEF7BF9_796E_4551_BE2A_7BD276CE8F0B
 	 */
-	public static final org.jooq.Sequence<java.lang.Long> SYSTEM_SEQUENCE_6C0353CD_2F78_4475_835E_DCBE68501B97 = new org.jooq.impl.SequenceImpl<java.lang.Long>("SYSTEM_SEQUENCE_6C0353CD_2F78_4475_835E_DCBE68501B97", org.jooq.h2.generated.Public.PUBLIC, org.jooq.impl.SQLDataType.BIGINT);
+	public static final org.jooq.Sequence<java.lang.Long> SYSTEM_SEQUENCE_1DEF7BF9_796E_4551_BE2A_7BD276CE8F0B = new org.jooq.impl.SequenceImpl<java.lang.Long>("SYSTEM_SEQUENCE_1DEF7BF9_796E_4551_BE2A_7BD276CE8F0B", org.jooq.h2.generated.Public.PUBLIC, org.jooq.impl.SQLDataType.BIGINT);
 
 	/**
-	 * The sequence PUBLIC.SYSTEM_SEQUENCE_93D4B417_6744_402D_9682_DE7061AAEEB1
+	 * The sequence PUBLIC.SYSTEM_SEQUENCE_77C4C8B4_AD62_4207_AEDF_9A247C4E8775
 	 */
-	public static final org.jooq.Sequence<java.lang.Long> SYSTEM_SEQUENCE_93D4B417_6744_402D_9682_DE7061AAEEB1 = new org.jooq.impl.SequenceImpl<java.lang.Long>("SYSTEM_SEQUENCE_93D4B417_6744_402D_9682_DE7061AAEEB1", org.jooq.h2.generated.Public.PUBLIC, org.jooq.impl.SQLDataType.BIGINT);
+	public static final org.jooq.Sequence<java.lang.Long> SYSTEM_SEQUENCE_77C4C8B4_AD62_4207_AEDF_9A247C4E8775 = new org.jooq.impl.SequenceImpl<java.lang.Long>("SYSTEM_SEQUENCE_77C4C8B4_AD62_4207_AEDF_9A247C4E8775", org.jooq.h2.generated.Public.PUBLIC, org.jooq.impl.SQLDataType.BIGINT);
 
 	/**
-	 * The sequence PUBLIC.SYSTEM_SEQUENCE_E0F3465C_6ABD_41F5_BE17_BED2EA5E8EF3
+	 * The sequence PUBLIC.SYSTEM_SEQUENCE_7CF3F611_F3D6_4934_87ED_99B52B3DB03D
 	 */
-	public static final org.jooq.Sequence<java.lang.Long> SYSTEM_SEQUENCE_E0F3465C_6ABD_41F5_BE17_BED2EA5E8EF3 = new org.jooq.impl.SequenceImpl<java.lang.Long>("SYSTEM_SEQUENCE_E0F3465C_6ABD_41F5_BE17_BED2EA5E8EF3", org.jooq.h2.generated.Public.PUBLIC, org.jooq.impl.SQLDataType.BIGINT);
+	public static final org.jooq.Sequence<java.lang.Long> SYSTEM_SEQUENCE_7CF3F611_F3D6_4934_87ED_99B52B3DB03D = new org.jooq.impl.SequenceImpl<java.lang.Long>("SYSTEM_SEQUENCE_7CF3F611_F3D6_4934_87ED_99B52B3DB03D", org.jooq.h2.generated.Public.PUBLIC, org.jooq.impl.SQLDataType.BIGINT);
 
 	/**
 	 * No instances
