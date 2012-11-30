@@ -2,6 +2,7 @@ package org.listbuilder.ui;
 
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.beans.binding.When;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.GroupBuilder;
@@ -60,6 +61,10 @@ public class ListBuilderMain extends Application {
 	public ListView<Unit> listView;
 
 	public static void main(String[] args) {
+		if (!Database.isInitialized()) {
+			Database.resetDatabase();
+		}
+		
 		Application.launch(args);
 	}
 
@@ -80,14 +85,12 @@ public class ListBuilderMain extends Application {
 				.build();
 
 		
+		listView.disableProperty().bind(UnitListModel.INSTANCE.queryActive);
 		progressIndicator.visibleProperty()
 						 .bind(UnitListModel.INSTANCE.queryActive);
 		stage.setScene(scene);
 		stage.setTitle("List Builder");
 		stage.show();
-
-		UnitListModel.INSTANCE.unitSearchByName("");
-		listView.getSelectionModel().select(-1);
 	}
 
 	private MenuBar createMenuBar() {
@@ -189,6 +192,15 @@ public class ListBuilderMain extends Application {
 								).build()
 				)
 				.build();
+		
+		backButton.disableProperty().bind(UnitListModel.INSTANCE.queryActive);
+		
+		searchButton.graphicProperty().bind(
+				new When(UnitListModel.INSTANCE.queryActive)
+				.then(cancelImageView)
+				.otherwise(searchImageView));
+		
+		
 		
 		strut.setPrefWidth(200);
 		strut.setMinWidth(Region.USE_PREF_SIZE);
