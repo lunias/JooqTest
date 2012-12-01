@@ -3,6 +3,7 @@ package org.listbuilder.model;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
@@ -22,7 +23,7 @@ import static org.jooq.h2.generated.Tables.*;
 public enum UnitListModel {
 
 	INSTANCE;
-
+	
 	private final Logger LOG = LoggerFactory.getLogger(UnitListModel.class);
 
 	Task<Void> queryTask = null;
@@ -37,13 +38,11 @@ public enum UnitListModel {
 
 	public void unitSearchByName(final String searchTerm) {
 		if (queryTask == null) {
-
 			queryTask = new Task<Void>() {
+				Connection conn = null;
 				@Override
 				protected Void call() {
-					Connection conn = null;
 					try {
-
 						conn = Database.getConnection();
 						Factory db = new H2Factory(conn);
 
@@ -56,15 +55,7 @@ public enum UnitListModel {
 									.selectFrom(UNIT)
 									.where(UNIT.NAME.like("%" + searchTerm
 											+ "%")).fetch();
-						}
-						
-						// simulate long query
-						try {
-							Thread.sleep(2000);
-						} catch (InterruptedException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
+						}							
 
 						ObservableList<Unit> resultUnits = FXCollections
 								.<Unit> observableArrayList();
@@ -79,19 +70,32 @@ public enum UnitListModel {
 								"Could not check database; connection failed",
 								sqle);
 					} finally {
-						if (conn != null) {
-							try {
-								conn.close();
-							} catch (SQLException sqle) {
-								LOG.warn("Could not close database connection",
-										sqle);
-							}
-						}
+						closeConnection();
 						queryTask = null;
-						updateActivityState();
-						//updateActivityState();
+						Platform.runLater(new Runnable() {							
+							@Override
+							public void run() {
+								updateActivityState();
+							}
+						});
 					}
 					return null;
+				}
+				
+				@Override 
+				protected void cancelled() {
+					super.cancelled();
+					closeConnection();
+				}
+				
+				private void closeConnection() {
+					if (conn != null) {
+						try {
+							conn.close();
+						} catch (SQLException sqle) {
+							LOG.warn("Could not close database connection", sqle);
+						}
+					}
 				}
 			};
 
@@ -107,9 +111,7 @@ public enum UnitListModel {
 	}
 
 	private void updateActivityState() {
-		boolean state = queryTask != null;
-		System.out.println(state);
-		queryActive.set(state);
+		queryActive.set(queryTask != null);
 	}
 
 }

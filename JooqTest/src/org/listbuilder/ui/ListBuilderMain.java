@@ -180,13 +180,14 @@ public class ListBuilderMain extends Application {
 						strut,
 						currentItemLabel = LabelBuilder.create()
 						.id("titleLabel")
+						.text("List Builder")
 						.build(),
 						spring,
 						GroupBuilder.create()
 						.children(
 								progressIndicator = ProgressIndicatorBuilder.create()
-								.scaleX(0.7)
-								.scaleY(0.7)
+								.scaleX(0.4)
+								.scaleY(0.4)
 								.progress(-1)
 								.build()								
 								).build()
@@ -198,9 +199,7 @@ public class ListBuilderMain extends Application {
 		searchButton.graphicProperty().bind(
 				new When(UnitListModel.INSTANCE.queryActive)
 				.then(cancelImageView)
-				.otherwise(searchImageView));
-		
-		
+				.otherwise(searchImageView));				
 		
 		strut.setPrefWidth(200);
 		strut.setMinWidth(Region.USE_PREF_SIZE);
