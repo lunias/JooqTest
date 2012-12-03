@@ -1,12 +1,12 @@
 package org.listbuilder.ui;
 
+import static org.jooq.h2.generated.Tables.UNIT;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.binding.When;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.Cursor;
 import javafx.scene.GroupBuilder;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -37,6 +37,7 @@ import javafx.scene.control.TextFieldBuilder;
 import javafx.scene.control.ToolBar;
 import javafx.scene.control.ToolBarBuilder;
 import javafx.scene.control.Tooltip;
+import javafx.scene.control.TooltipBuilder;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -65,14 +66,10 @@ public class ListBuilderMain extends Application {
 	
 	MenuButton menuButton;
 	TextField searchTextField;
+	Tooltip searchTooltip;
 	Button searchButton;
 	Label currentItemLabel;
-	ProgressIndicator progressIndicator;
-	
-	String searchFieldTooltip = "Search by Name";
-	
-	private final BooleanProperty includeName = new SimpleBooleanProperty();
-	private final BooleanProperty includePointValue = new SimpleBooleanProperty();
+	ProgressIndicator progressIndicator;		
 
 	public ListView<Unit> listView;
 	public TableView<Unit> tableView;
@@ -127,7 +124,6 @@ public class ListBuilderMain extends Application {
 								.onAction(new EventHandler<ActionEvent>() {
 									@Override
 									public void handle(ActionEvent e) {
-										Database.dispose();
 										Platform.exit();
 									}
 								}).build()).build(),
@@ -142,6 +138,7 @@ public class ListBuilderMain extends Application {
 										.onAction(new EventHandler<ActionEvent>() {
 											@Override
 											public void handle(ActionEvent e) {
+												Database.dispose();
 												Database.resetDatabase();
 											}
 										})
@@ -170,6 +167,7 @@ public class ListBuilderMain extends Application {
 		ToolBar toolBar = ToolBarBuilder.create()
 				.items(
 						menuButton = MenuButtonBuilder.create().id("menuButton")
+						.cursor(Cursor.HAND)
 						.graphic(new ImageView(
 								new Image(getClass()
 										.getResourceAsStream("img/menu.png")))
@@ -180,34 +178,49 @@ public class ListBuilderMain extends Application {
 								.onAction(new EventHandler<ActionEvent>() {
 									@Override
 									public void handle(ActionEvent e) {
-										
+										UnitListModel.INSTANCE.toggleSearchOnColumn(UNIT.NAME);
 									}
 								})
 								.build(),
 								CheckMenuItemBuilder.create()
 								.text("Point Value")
-								.build())
+								.onAction(new EventHandler<ActionEvent>() {
+									@Override
+									public void handle(ActionEvent e) {
+										UnitListModel.INSTANCE.toggleSearchOnColumn(UNIT.POINT);
+									}
+								})
+								.build(),
+								CheckMenuItemBuilder.create()
+								.text("Type")
+								.onAction(new EventHandler<ActionEvent>() {
+									@Override
+									public void handle(ActionEvent e) {
+										UnitListModel.INSTANCE.toggleSearchOnColumn(UNIT.TYPE);
+									}
+								}).build())
 						.build(),
 						HBoxBuilder.create()
 						.spacing(5)
 						.children(
 								searchTextField = TextFieldBuilder.create()
 								.prefColumnCount(15)
-								.tooltip(new Tooltip(searchFieldTooltip))
+								.tooltip(searchTooltip = TooltipBuilder.create().build())
 								.onAction(new EventHandler<ActionEvent>() {
 									@Override
 									public void handle(ActionEvent e) {
-										UnitListModel.INSTANCE.unitSearchByName(searchTextField.getText());
+										UnitListModel.INSTANCE.unitSearch(searchTextField.getText());
 										searchTextField.setText("");
 									}
 								})
 								.build(),
 								searchButton = ButtonBuilder.create()
 								.id("searchButton")
+								.cursor(Cursor.HAND)
 								.onAction(new EventHandler<ActionEvent>() {
 									@Override
 									public void handle(ActionEvent e) {
-										UnitListModel.INSTANCE.unitSearchByName(searchTextField.getText());
+										UnitListModel.INSTANCE.unitSearch(searchTextField.getText());
 										searchTextField.setText("");
 									}
 								})
@@ -235,7 +248,9 @@ public class ListBuilderMain extends Application {
 		searchButton.graphicProperty().bind(
 				new When(UnitListModel.INSTANCE.queryActive)
 				.then(cancelImageView)
-				.otherwise(searchImageView));				
+				.otherwise(searchImageView));
+		
+		searchTooltip.textProperty().bind(UnitListModel.INSTANCE.searchColumns);
 		
 		strut.setPrefWidth(300);
 		strut.setMinWidth(Region.USE_PREF_SIZE);
@@ -288,7 +303,13 @@ public class ListBuilderMain extends Application {
 				.prefWidth(100)
 				.build();
 		
-		tableView.getColumns().addAll(imageColumn, nameColumn, pointColumn);
+		TableColumn<Unit, String> typeColumn = TableColumnBuilder.<Unit, String>create()
+				.text("Type")
+				.cellValueFactory(new PropertyValueFactory<Unit, String>("type"))
+				.prefWidth(75)
+				.build();
+		
+		tableView.getColumns().addAll(imageColumn, typeColumn, nameColumn, pointColumn);
 		
 		return tableView;
 	}

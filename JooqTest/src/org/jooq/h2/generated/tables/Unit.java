@@ -11,7 +11,7 @@ package org.jooq.h2.generated.tables;
 @java.lang.SuppressWarnings("all")
 public class Unit extends org.jooq.impl.UpdatableTableImpl<org.jooq.h2.generated.tables.records.UnitRecord> {
 
-	private static final long serialVersionUID = 172731854;
+	private static final long serialVersionUID = -1270115740;
 
 	/**
 	 * The singleton instance of PUBLIC.UNIT
@@ -41,12 +41,12 @@ public class Unit extends org.jooq.impl.UpdatableTableImpl<org.jooq.h2.generated
 	/**
 	 * The table column <code>PUBLIC.UNIT.TYPE</code>
 	 */
-	public final org.jooq.TableField<org.jooq.h2.generated.tables.records.UnitRecord, java.lang.Byte> TYPE = createField("TYPE", org.jooq.impl.SQLDataType.TINYINT, this);
+	public final org.jooq.TableField<org.jooq.h2.generated.tables.records.UnitRecord, java.lang.Integer> TYPE = createField("TYPE", org.jooq.impl.SQLDataType.INTEGER, this);
 
 	/**
 	 * The table column <code>PUBLIC.UNIT.POINT</code>
 	 */
-	public final org.jooq.TableField<org.jooq.h2.generated.tables.records.UnitRecord, java.lang.Byte> POINT = createField("POINT", org.jooq.impl.SQLDataType.TINYINT, this);
+	public final org.jooq.TableField<org.jooq.h2.generated.tables.records.UnitRecord, java.lang.Integer> POINT = createField("POINT", org.jooq.impl.SQLDataType.INTEGER, this);
 
 	public Unit() {
 		super("UNIT", org.jooq.h2.generated.Public.PUBLIC);

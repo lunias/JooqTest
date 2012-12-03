@@ -9,8 +9,8 @@ NAME varchar_ignorecase(255) not null);
 create table UNIT
 (ID int primary key auto_increment,
 NAME varchar_ignorecase(255) not null,
-TYPE tinyint not null,
-POINT tinyint not null);
+TYPE int not null,
+POINT int not null);
 
 create table TYPE
 (ID int primary key auto_increment,

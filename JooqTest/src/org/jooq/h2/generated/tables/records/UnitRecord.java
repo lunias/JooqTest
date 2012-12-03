@@ -11,7 +11,7 @@ package org.jooq.h2.generated.tables.records;
 @java.lang.SuppressWarnings("all")
 public class UnitRecord extends org.jooq.impl.UpdatableRecordImpl<org.jooq.h2.generated.tables.records.UnitRecord> {
 
-	private static final long serialVersionUID = 1177665194;
+	private static final long serialVersionUID = 1197086806;
 
 	/**
 	 * The table column <code>PUBLIC.UNIT.ID</code>
@@ -48,28 +48,28 @@ public class UnitRecord extends org.jooq.impl.UpdatableRecordImpl<org.jooq.h2.ge
 	/**
 	 * The table column <code>PUBLIC.UNIT.TYPE</code>
 	 */
-	public void setType(java.lang.Byte value) {
+	public void setType(java.lang.Integer value) {
 		setValue(org.jooq.h2.generated.tables.Unit.UNIT.TYPE, value);
 	}
 
 	/**
 	 * The table column <code>PUBLIC.UNIT.TYPE</code>
 	 */
-	public java.lang.Byte getType() {
+	public java.lang.Integer getType() {
 		return getValue(org.jooq.h2.generated.tables.Unit.UNIT.TYPE);
 	}
 
 	/**
 	 * The table column <code>PUBLIC.UNIT.POINT</code>
 	 */
-	public void setPoint(java.lang.Byte value) {
+	public void setPoint(java.lang.Integer value) {
 		setValue(org.jooq.h2.generated.tables.Unit.UNIT.POINT, value);
 	}
 
 	/**
 	 * The table column <code>PUBLIC.UNIT.POINT</code>
 	 */
-	public java.lang.Byte getPoint() {
+	public java.lang.Integer getPoint() {
 		return getValue(org.jooq.h2.generated.tables.Unit.UNIT.POINT);
 	}
 
