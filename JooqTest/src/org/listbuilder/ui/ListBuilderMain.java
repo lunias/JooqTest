@@ -11,6 +11,7 @@ import javafx.scene.Scene;
 import javafx.scene.SceneBuilder;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBuilder;
+import javafx.scene.control.CheckMenuItemBuilder;
 import javafx.scene.control.Label;
 import javafx.scene.control.LabelBuilder;
 import javafx.scene.control.ListCell;
@@ -19,14 +20,22 @@ import javafx.scene.control.ListViewBuilder;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuBarBuilder;
 import javafx.scene.control.MenuBuilder;
+import javafx.scene.control.MenuButton;
+import javafx.scene.control.MenuButtonBuilder;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.MenuItemBuilder;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.ProgressIndicatorBuilder;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableColumnBuilder;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TableViewBuilder;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFieldBuilder;
 import javafx.scene.control.ToolBar;
 import javafx.scene.control.ToolBarBuilder;
+import javafx.scene.control.Tooltip;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.ImageViewBuilder;
@@ -43,6 +52,7 @@ import javafx.util.Callback;
 import org.listbuilder.common.Database;
 import org.listbuilder.model.Unit;
 import org.listbuilder.model.UnitListModel;
+import org.listbuilder.model.UnitTableModel;
 
 public class ListBuilderMain extends Application {
 
@@ -51,14 +61,16 @@ public class ListBuilderMain extends Application {
 	MenuItem fileMenu;
 	MenuItem helpMenu;
 	
-	Button backButton;
+	MenuButton menuButton;
 	TextField searchTextField;
 	Button searchButton;
 	Label currentItemLabel;
 	ProgressIndicator progressIndicator;
 	
+	String searchFieldTooltip = "Search by Name";
 
 	public ListView<Unit> listView;
+	public TableView<Unit> tableView;
 
 	public static void main(String[] args) {
 		if (!Database.isInitialized()) {
@@ -81,7 +93,9 @@ public class ListBuilderMain extends Application {
 						.create()
 						.top(VBoxBuilder.create()
 								.children(createMenuBar(), createToolBar())
-								.build()).left(createListView()).build())
+								.build())
+						.left(createListView())
+						.center(createTableView()).build())
 				.build();
 
 		
@@ -90,6 +104,8 @@ public class ListBuilderMain extends Application {
 						 .bind(UnitListModel.INSTANCE.queryActive);
 		stage.setScene(scene);
 		stage.setTitle("List Builder");
+		stage.setMinWidth(800);
+		stage.setMinHeight(600);
 		stage.show();
 	}
 
@@ -98,7 +114,7 @@ public class ListBuilderMain extends Application {
 				.create()
 				.menus(MenuBuilder
 						.create()
-						.text("File")
+						.text("_File")
 						.items(MenuItemBuilder
 								.create()
 								.text("Exit")
@@ -113,12 +129,12 @@ public class ListBuilderMain extends Application {
 								}).build()).build(),
 						MenuBuilder
 								.create()
-								.text("Options")
+								.text("_Options")
 								.items(MenuItemBuilder.create().text("Sorting")
 										.build()).build(),
 						MenuBuilder
 								.create()
-								.text("Help")
+								.text("_Help")
 								.items(MenuItemBuilder.create().text("About")
 										.build()).build()).build();
 		return menuBar;
@@ -138,24 +154,24 @@ public class ListBuilderMain extends Application {
 		
 		ToolBar toolBar = ToolBarBuilder.create()
 				.items(
-						backButton = ButtonBuilder.create().id("backButton")
+						menuButton = MenuButtonBuilder.create().id("menuButton")
 						.graphic(new ImageView(
 								new Image(getClass()
-										.getResourceAsStream("img/back.png")))
+										.getResourceAsStream("img/menu.png")))
 						)
-						.onAction(new EventHandler<ActionEvent>() {
-							@Override
-							public void handle(ActionEvent e) {
-								// TODO make this do something
-								System.out.println("CLICKED BACK");
-							}
-						})
+						.items(CheckMenuItemBuilder.create()
+								.text("Name")
+								.build(),
+								CheckMenuItemBuilder.create()
+								.text("Point Value")
+								.build())
 						.build(),
 						HBoxBuilder.create()
 						.spacing(5)
 						.children(
 								searchTextField = TextFieldBuilder.create()
 								.prefColumnCount(15)
+								.tooltip(new Tooltip(searchFieldTooltip))
 								.onAction(new EventHandler<ActionEvent>() {
 									@Override
 									public void handle(ActionEvent e) {
@@ -194,24 +210,27 @@ public class ListBuilderMain extends Application {
 				)
 				.build();
 		
-		backButton.disableProperty().bind(UnitListModel.INSTANCE.queryActive);
+		menuButton.disableProperty().bind(UnitListModel.INSTANCE.queryActive);
 		
 		searchButton.graphicProperty().bind(
 				new When(UnitListModel.INSTANCE.queryActive)
 				.then(cancelImageView)
 				.otherwise(searchImageView));				
 		
-		strut.setPrefWidth(200);
+		strut.setPrefWidth(300);
 		strut.setMinWidth(Region.USE_PREF_SIZE);
 		strut.setMaxWidth(Region.USE_PREF_SIZE);
-		HBox.setHgrow(spring, Priority.ALWAYS);
+		HBox.setHgrow(spring, Priority.ALWAYS);		
 
 		return toolBar;
 	}
 
 	private Node createListView() {
 		listView = ListViewBuilder.<Unit> create()
-				.items(UnitListModel.INSTANCE.unitList).editable(false).build();
+				.items(UnitListModel.INSTANCE.getUnitList())
+				.editable(false)
+				.prefWidth(280)				
+				.build();
 
 		listView.setCellFactory(new Callback<ListView<Unit>, ListCell<Unit>>() {
 			@Override
@@ -223,6 +242,35 @@ public class ListBuilderMain extends Application {
 		});
 
 		return listView;
+	}
+	
+	private Node createTableView() {
+		tableView = TableViewBuilder.<Unit>create()
+				.placeholder(new Label("Add a model to start"))
+				.tableMenuButtonVisible(true)
+				.items(UnitTableModel.INSTANCE.getUnitList())
+				.build();
+		
+		TableColumn<Unit, String> imageColumn = TableColumnBuilder.<Unit, String>create()
+				.text("Image")
+				.prefWidth(100)
+				.build();
+		
+		TableColumn<Unit, String> nameColumn = TableColumnBuilder.<Unit, String>create()
+				.text("Name")
+				.cellValueFactory(new PropertyValueFactory<Unit, String>("name"))
+				.prefWidth(200)
+				.build();
+		
+		TableColumn<Unit, Integer> pointColumn = TableColumnBuilder.<Unit, Integer>create()
+				.text("Point Value")
+				.cellValueFactory(new PropertyValueFactory<Unit, Integer>("pointValue"))
+				.prefWidth(100)
+				.build();
+		
+		tableView.getColumns().addAll(imageColumn, nameColumn, pointColumn);
+		
+		return tableView;
 	}
 
 }
