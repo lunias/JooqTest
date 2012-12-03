@@ -44,6 +44,10 @@ public enum UnitListModel {
 		return unitList;
 	}
 
+	public void setSearchColumns() {
+		// searchColumns = 
+	}
+	
 	public void unitSearchByName(final String searchTerm) {
 		if (queryTask == null) {
 			queryTask = new Task<Void>() {
@@ -66,21 +70,11 @@ public enum UnitListModel {
 							SimpleSelectQuery<UnitRecord> select = db
 									.selectQuery(UNIT);
 							for (TableField<UnitRecord, ?> field : searchColumns) {
-								if (field.getDataType().isString()) {
 									select.addConditions(Operator.OR,
 											field.like("%" + searchTerm + "%"));
-								} else {
-									//select.addConditions(Operator.OR, field.eq(searchTerm));									
-								}
-
 							}
 
 							searchResult = select.fetch();
-
-							// searchResult = db
-							// .selectFrom(UNIT)
-							// .where(UNIT.NAME.like("%" + searchTerm
-							// + "%")).fetch();
 						}
 
 						ObservableList<Unit> resultUnits = FXCollections

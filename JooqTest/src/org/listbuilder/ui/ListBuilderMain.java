@@ -3,6 +3,8 @@ package org.listbuilder.ui;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.binding.When;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.GroupBuilder;
@@ -68,6 +70,9 @@ public class ListBuilderMain extends Application {
 	ProgressIndicator progressIndicator;
 	
 	String searchFieldTooltip = "Search by Name";
+	
+	private final BooleanProperty includeName = new SimpleBooleanProperty();
+	private final BooleanProperty includePointValue = new SimpleBooleanProperty();
 
 	public ListView<Unit> listView;
 	public TableView<Unit> tableView;
@@ -75,8 +80,7 @@ public class ListBuilderMain extends Application {
 	public static void main(String[] args) {
 		if (!Database.isInitialized()) {
 			Database.resetDatabase();
-		}
-		
+		}		
 		Application.launch(args);
 	}
 
@@ -130,8 +134,19 @@ public class ListBuilderMain extends Application {
 						MenuBuilder
 								.create()
 								.text("_Options")
-								.items(MenuItemBuilder.create().text("Sorting")
-										.build()).build(),
+								.items(MenuItemBuilder.create()
+										.text("Sorting")
+										.build(),
+										MenuItemBuilder.create()
+										.text("Reset Database")
+										.onAction(new EventHandler<ActionEvent>() {
+											@Override
+											public void handle(ActionEvent e) {
+												Database.resetDatabase();
+											}
+										})
+										.build()
+								).build(),
 						MenuBuilder
 								.create()
 								.text("_Help")
@@ -161,6 +176,13 @@ public class ListBuilderMain extends Application {
 						)
 						.items(CheckMenuItemBuilder.create()
 								.text("Name")
+								.selected(true)
+								.onAction(new EventHandler<ActionEvent>() {
+									@Override
+									public void handle(ActionEvent e) {
+										
+									}
+								})
 								.build(),
 								CheckMenuItemBuilder.create()
 								.text("Point Value")
@@ -175,7 +197,6 @@ public class ListBuilderMain extends Application {
 								.onAction(new EventHandler<ActionEvent>() {
 									@Override
 									public void handle(ActionEvent e) {
-										System.out.println("ACTION IN SEARCH FIELD");
 										UnitListModel.INSTANCE.unitSearchByName(searchTextField.getText());
 										searchTextField.setText("");
 									}
@@ -186,7 +207,6 @@ public class ListBuilderMain extends Application {
 								.onAction(new EventHandler<ActionEvent>() {
 									@Override
 									public void handle(ActionEvent e) {
-										System.out.println("CLICKED SEARCH");
 										UnitListModel.INSTANCE.unitSearchByName(searchTextField.getText());
 										searchTextField.setText("");
 									}
