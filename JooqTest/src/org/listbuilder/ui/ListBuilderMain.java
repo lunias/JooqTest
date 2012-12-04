@@ -28,6 +28,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.MenuItemBuilder;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.ProgressIndicatorBuilder;
+import javafx.scene.control.RadioMenuItemBuilder;
 import javafx.scene.control.SeparatorMenuItemBuilder;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumnBuilder;
@@ -35,6 +36,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TableViewBuilder;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFieldBuilder;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.ToolBar;
 import javafx.scene.control.ToolBarBuilder;
 import javafx.scene.control.Tooltip;
@@ -53,6 +55,7 @@ import javafx.scene.layout.VBoxBuilder;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
+import org.jooq.h2.generated.tables.Faction;
 import org.listbuilder.common.Database;
 import org.listbuilder.model.Unit;
 import org.listbuilder.model.UnitListModel;
@@ -130,6 +133,11 @@ public class ListBuilderMain extends Application {
 								MenuItemBuilder.create()
 								.text("Save As...")								
 								.build(),
+								MenuItemBuilder.create()
+								.text("Print")
+								.accelerator(
+										KeyCombination.keyCombination("Ctrl+P"))
+								.build(),
 								SeparatorMenuItemBuilder.create()
 								.build(),
 								MenuItemBuilder.create()
@@ -184,6 +192,8 @@ public class ListBuilderMain extends Application {
 		Region strut = new Region();
 		Region spring = new Region();
 		
+		ToggleGroup toggleGroup = new ToggleGroup();
+		
 		ImageView searchImageView = ImageViewBuilder.create()
 				.image(new Image(getClass().getResourceAsStream("img/search.png")))
 				.build();
@@ -193,40 +203,81 @@ public class ListBuilderMain extends Application {
 				.build();
 		
 		ToolBar toolBar = ToolBarBuilder.create()
-				.items(
-						menuButton = MenuButtonBuilder.create().id("menuButton")
+				.items(menuButton = MenuButtonBuilder.create()
+						.id("menuButton")
 						.cursor(Cursor.HAND)
+						.prefWidth(15)
 						.graphic(new ImageView(
 								new Image(getClass()
 										.getResourceAsStream("img/menu.png")))
 						)
-						.items(CheckMenuItemBuilder.create()
-								.text("Name")
-								.selected(true)
-								.onAction(new EventHandler<ActionEvent>() {
-									@Override
-									public void handle(ActionEvent e) {
-										UnitListModel.INSTANCE.toggleSearchOnColumn(UNIT.NAME);
-									}
-								})
+						.items(MenuBuilder.create()
+								.text("Search Columns")
+								.items(CheckMenuItemBuilder.create()
+										.text("Name")
+										.selected(true)
+										.onAction(new EventHandler<ActionEvent>() {
+											@Override
+											public void handle(ActionEvent e) {
+												UnitListModel.INSTANCE.toggleSearchOnColumn(UNIT.NAME);
+											}
+										})
+										.build(),
+										CheckMenuItemBuilder.create()
+										.text("Point Value")
+										.onAction(new EventHandler<ActionEvent>() {
+											@Override
+											public void handle(ActionEvent e) {
+												UnitListModel.INSTANCE.toggleSearchOnColumn(UNIT.POINT);
+											}
+										})
+										.build(),
+										CheckMenuItemBuilder.create()
+										.text("Faction")
+										.onAction(new EventHandler<ActionEvent>() {
+											@Override
+											public void handle(ActionEvent e) {
+												UnitListModel.INSTANCE.toggleSearchOnColumn(FACTION.NAME);
+											}
+										})
+										.build(),
+										CheckMenuItemBuilder.create()
+										.text("Type")
+										.onAction(new EventHandler<ActionEvent>() {
+											@Override
+											public void handle(ActionEvent e) {
+												UnitListModel.INSTANCE.toggleSearchOnColumn(TYPE.TYPE_);
+											}
+										})
+										.build())
 								.build(),
-								CheckMenuItemBuilder.create()
-								.text("Point Value")
-								.onAction(new EventHandler<ActionEvent>() {
-									@Override
-									public void handle(ActionEvent e) {
-										UnitListModel.INSTANCE.toggleSearchOnColumn(UNIT.POINT);
-									}
-								})
-								.build(),
-								CheckMenuItemBuilder.create()
-								.text("Type")
-								.onAction(new EventHandler<ActionEvent>() {
-									@Override
-									public void handle(ActionEvent e) {
-										UnitListModel.INSTANCE.toggleSearchOnColumn(TYPE.TYPE_);
-									}
-								}).build())
+								MenuBuilder.create()
+								.text("Search Operator")
+								.items(RadioMenuItemBuilder.create()
+										.text("AND")										
+										.toggleGroup(toggleGroup)
+										.onAction(new EventHandler<ActionEvent>() {
+											@Override
+											public void handle(ActionEvent e) {	
+												System.out.println("CLICKED AND");
+												UnitListModel.INSTANCE.toggleSearchAnd();
+											}
+										})
+										.build(),
+										RadioMenuItemBuilder.create()
+										.selected(true)
+										.text("OR")
+										.toggleGroup(toggleGroup)
+										.onAction(new EventHandler<ActionEvent>() {
+											@Override
+											public void handle(ActionEvent e) {												
+												System.out.println("CLICKED OR");
+												UnitListModel.INSTANCE.toggleSearchAnd();
+											}
+										})
+										.build())
+								.build()
+								)
 						.build(),
 						HBoxBuilder.create()
 						.spacing(5)
@@ -320,6 +371,12 @@ public class ListBuilderMain extends Application {
 				.prefWidth(75)
 				.build();
 		
+		TableColumn<Unit, String> factionColumn = TableColumnBuilder.<Unit, String>create()
+				.text("Faction")
+				.cellValueFactory(new PropertyValueFactory<Unit, String>("faction"))
+				.prefWidth(100)
+				.build();
+		
 		TableColumn<Unit, String> nameColumn = TableColumnBuilder.<Unit, String>create()
 				.text("Name")
 				.cellValueFactory(new PropertyValueFactory<Unit, String>("name"))
@@ -338,7 +395,7 @@ public class ListBuilderMain extends Application {
 				.prefWidth(75)
 				.build();
 		
-		tableView.getColumns().addAll(quantityColumn, typeColumn, nameColumn, pointColumn);
+		tableView.getColumns().addAll(quantityColumn, factionColumn, typeColumn, nameColumn, pointColumn);
 		
 		return tableView;
 	}

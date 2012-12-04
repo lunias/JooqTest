@@ -34,16 +34,16 @@ public enum UnitListModel {
 
 	private final Logger LOG = LoggerFactory.getLogger(UnitListModel.class);
 
-	Task<Void> queryTask = null;
+	private Task<Void> queryTask = null;
+	
 	public BooleanProperty queryActive = new SimpleBooleanProperty(false);
-
 	public StringProperty searchColumns = new SimpleStringProperty(
-			"Search on NAME");
+			"Search on (OR) NAME");
 
-	private ObservableList<Unit> unitList = FXCollections
-			.<Unit> observableArrayList();
-
+	private ObservableList<Unit> unitList = FXCollections.<Unit> observableArrayList();
 	private Map<TableField<? extends Record, ?>, Boolean> searchMap = new HashMap<TableField<? extends Record, ?>, Boolean>();
+	
+	private boolean searchAnd = false;
 
 	private UnitListModel() {
 		searchMap.put(UNIT.NAME, true);
@@ -53,6 +53,11 @@ public enum UnitListModel {
 		return unitList;
 	}
 
+	public void toggleSearchAnd() {
+		searchAnd = !searchAnd;
+		updateSearchColumns();
+	}
+	
 	public void toggleSearchOnColumn(TableField<? extends Record, ?> field) {
 		if (searchMap.containsKey(field)) {
 			searchMap.put(field, !searchMap.get(field));
@@ -64,6 +69,12 @@ public enum UnitListModel {
 
 	public void updateSearchColumns() {
 		String sReturn = "Search on ";
+		if (searchAnd) {
+			sReturn += "(AND) ";
+		} else {
+			sReturn += "(OR) ";
+		}
+		
 		for (Entry<TableField<? extends Record, ?>, Boolean> entry : searchMap
 				.entrySet()) {
 			if (entry.getValue() == true) {
@@ -84,19 +95,27 @@ public enum UnitListModel {
  						conn = Database.getConnection();
  						Factory db = new H2Factory(conn);
  
+ 						Operator operator;
+ 						if (searchAnd) {
+ 							operator = Operator.AND; 							
+ 						} else {
+ 							operator = Operator.OR;
+ 						}
+ 						
  						Result<? extends Record> searchResult;					 						
  						
  						SelectQuery query = db.selectQuery();
  						query.addSelect(UNIT.NAME, UNIT.POINT, TYPE.TYPE_);
  						query.addFrom(UNIT);
- 						query.addJoin(TYPE, UNIT.TYPE.equal(TYPE.ID)); 						
+ 						query.addJoin(TYPE, UNIT.TYPE.equal(TYPE.ID));
+ 						//query.addJoin(FACTION, UNIT.FACTION.equal(FACTION.ID));
  						
  						if (!searchTerm.isEmpty()) {
  							for (Entry<TableField<? extends Record, ?>, Boolean> entry : searchMap
  									.entrySet()) {
  								if (entry.getValue() == true) {
  									query.addConditions(
- 											Operator.OR,
+ 											operator,
  											entry.getKey().likeIgnoreCase(
  													"%" + searchTerm + "%"));
  

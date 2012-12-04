@@ -13,7 +13,8 @@ public class Unit {
 	private IntegerProperty quantity = new SimpleIntegerProperty(); 
 	private StringProperty name = new SimpleStringProperty();
 	private IntegerProperty pointValue = new SimpleIntegerProperty();
-	private StringProperty type = new SimpleStringProperty();	
+	private StringProperty type = new SimpleStringProperty();
+	private StringProperty faction = new SimpleStringProperty();
 	
 	public Unit(Record record) {
 		String name = record.getValue(UNIT.NAME);
@@ -21,7 +22,8 @@ public class Unit {
 		setQuantity(1);		
 		setName(name);
 		setPointValue(record.getValue(UNIT.POINT));
-		setType(record.getValue(TYPE.TYPE_));		
+		setType(record.getValue(TYPE.TYPE_));
+		//setFaction(record.getValue(FACTION.NAME));
 	}
 	
 	public void setQuantity(Integer quantity) {
@@ -62,6 +64,16 @@ public class Unit {
 	}
 	public StringProperty typeProperty() {
 		return type;
+	}
+	
+	public void setFaction(String faction) {
+		this.faction.set(faction);		
+	}
+	public String getFaction() {
+		return faction.get();
+	}
+	public StringProperty factionProperty() {
+		return faction;
 	}
 	
 	@Override
