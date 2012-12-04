@@ -1,6 +1,6 @@
 package org.listbuilder.ui;
 
-import static org.jooq.h2.generated.Tables.UNIT;
+import static org.jooq.h2.generated.Tables.*;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.binding.When;
@@ -138,7 +138,6 @@ public class ListBuilderMain extends Application {
 										.onAction(new EventHandler<ActionEvent>() {
 											@Override
 											public void handle(ActionEvent e) {
-												Database.dispose();
 												Database.resetDatabase();
 											}
 										})
@@ -196,7 +195,7 @@ public class ListBuilderMain extends Application {
 								.onAction(new EventHandler<ActionEvent>() {
 									@Override
 									public void handle(ActionEvent e) {
-										UnitListModel.INSTANCE.toggleSearchOnColumn(UNIT.TYPE);
+										UnitListModel.INSTANCE.toggleSearchOnColumn(TYPE.TYPE_);
 									}
 								}).build())
 						.build(),
@@ -286,15 +285,16 @@ public class ListBuilderMain extends Application {
 				.items(UnitTableModel.INSTANCE.getUnitList())
 				.build();
 		
-		TableColumn<Unit, String> imageColumn = TableColumnBuilder.<Unit, String>create()
-				.text("Image")
+		TableColumn<Unit, Integer> quantityColumn = TableColumnBuilder.<Unit, Integer>create()
+				.text("Quantity")
+				.cellValueFactory(new PropertyValueFactory<Unit, Integer>("quantity"))
 				.prefWidth(100)
 				.build();
 		
 		TableColumn<Unit, String> nameColumn = TableColumnBuilder.<Unit, String>create()
 				.text("Name")
 				.cellValueFactory(new PropertyValueFactory<Unit, String>("name"))
-				.prefWidth(200)
+				.prefWidth(175)
 				.build();
 		
 		TableColumn<Unit, Integer> pointColumn = TableColumnBuilder.<Unit, Integer>create()
@@ -309,7 +309,7 @@ public class ListBuilderMain extends Application {
 				.prefWidth(75)
 				.build();
 		
-		tableView.getColumns().addAll(imageColumn, typeColumn, nameColumn, pointColumn);
+		tableView.getColumns().addAll(quantityColumn, typeColumn, nameColumn, pointColumn);
 		
 		return tableView;
 	}

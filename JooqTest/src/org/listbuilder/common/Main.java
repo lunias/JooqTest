@@ -18,9 +18,7 @@ public class Main {
 		
 		final Logger LOG = LoggerFactory.getLogger(Main.class);
 		
-		if (!Database.isInitialized()) {
-			Database.resetDatabase();
-		}
+		Database.resetDatabase();
 		
 		Connection conn = null;
 		try {
