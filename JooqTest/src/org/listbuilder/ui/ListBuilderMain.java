@@ -117,8 +117,22 @@ public class ListBuilderMain extends Application {
 				.menus(MenuBuilder
 						.create()
 						.text("_File")
-						.items(MenuItemBuilder
-								.create()
+						.items(MenuItemBuilder.create()
+								.text("Open File...")
+								.accelerator(
+										KeyCombination.keyCombination("Ctrl+O"))
+								.build(),
+								MenuItemBuilder.create()
+								.text("Save")
+								.accelerator(
+										KeyCombination.keyCombination("Ctrl+S"))
+								.build(),
+								MenuItemBuilder.create()
+								.text("Save As...")								
+								.build(),
+								SeparatorMenuItemBuilder.create()
+								.build(),
+								MenuItemBuilder.create()
 								.text("Exit")
 								.accelerator(
 										KeyCombination.keyCombination("Ctrl+Q"))
@@ -130,11 +144,23 @@ public class ListBuilderMain extends Application {
 								}).build()).build(),
 						MenuBuilder
 								.create()
-								.text("_Options")
+								.text("_Edit")
 								.items(MenuItemBuilder.create()
-										.text("Sorting")
+										.text("Add Unit")
+										.build(),
+										MenuItemBuilder.create()
+										.text("Edit / Remove Unit")
 										.build(),
 										SeparatorMenuItemBuilder.create()
+										.build(),
+										MenuItemBuilder.create()
+										.text("Export Database")
+										.onAction(new EventHandler<ActionEvent>() {
+											@Override
+											public void handle(ActionEvent e) {
+												Database.exportDatabase();
+											}
+										})
 										.build(),
 										MenuItemBuilder.create()
 										.text("Reset Database")

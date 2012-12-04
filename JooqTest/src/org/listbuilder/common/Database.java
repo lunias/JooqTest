@@ -8,6 +8,7 @@ import java.sql.SQLException;
 
 import org.h2.jdbcx.JdbcConnectionPool;
 import org.h2.tools.RunScript;
+import org.h2.tools.Script;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -76,6 +77,14 @@ public class Database {
 					LOG.warn("Could not close database connection", sqle); 
 				}
 			}
+		}
+	}
+	
+	public static void exportDatabase() {
+		try {
+			Script.execute(URL, USERNAME, PASSWORD, "scripts/dump.sql");
+		} catch (SQLException sqle) {
+			LOG.error("Could not export database; sql exception occured", sqle);
 		}
 	}
 	
