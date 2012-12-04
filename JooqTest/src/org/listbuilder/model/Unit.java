@@ -18,7 +18,7 @@ public class Unit {
 	public Unit(Record record) {
 		String name = record.getValue(UNIT.NAME);
 		
-		setQuantity(UnitTableModel.INSTANCE.getUnitQuantityByName(name));		
+		setQuantity(1);		
 		setName(name);
 		setPointValue(record.getValue(UNIT.POINT));
 		setType(record.getValue(TYPE.TYPE_));		
@@ -30,7 +30,7 @@ public class Unit {
 	public Integer getQuantity() {
 		return quantity.get();
 	}
-	public IntegerProperty getQuantityProperty() {
+	public IntegerProperty quantityProperty() {
 		return quantity;
 	}
 	
@@ -40,7 +40,7 @@ public class Unit {
 	public String getName() {
 		return name.get();
 	}
-	public StringProperty getNameProperty() {
+	public StringProperty nameProperty() {
 		return name;
 	}
 		
@@ -50,7 +50,7 @@ public class Unit {
 	public int getPointValue() {
 		return pointValue.get();
 	}
-	public IntegerProperty getPointValueProperty() {
+	public IntegerProperty pointValueProperty() {
 		return pointValue;
 	}
 	
@@ -60,7 +60,7 @@ public class Unit {
 	public String getType() {
 		return type.get();
 	}
-	public StringProperty getTypeProperty() {
+	public StringProperty typeProperty() {
 		return type;
 	}
 	

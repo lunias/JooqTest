@@ -28,6 +28,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.MenuItemBuilder;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.ProgressIndicatorBuilder;
+import javafx.scene.control.SeparatorMenuItemBuilder;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumnBuilder;
 import javafx.scene.control.TableView;
@@ -132,6 +133,8 @@ public class ListBuilderMain extends Application {
 								.text("_Options")
 								.items(MenuItemBuilder.create()
 										.text("Sorting")
+										.build(),
+										SeparatorMenuItemBuilder.create()
 										.build(),
 										MenuItemBuilder.create()
 										.text("Reset Database")
@@ -288,7 +291,7 @@ public class ListBuilderMain extends Application {
 		TableColumn<Unit, Integer> quantityColumn = TableColumnBuilder.<Unit, Integer>create()
 				.text("Quantity")
 				.cellValueFactory(new PropertyValueFactory<Unit, Integer>("quantity"))
-				.prefWidth(100)
+				.prefWidth(75)
 				.build();
 		
 		TableColumn<Unit, String> nameColumn = TableColumnBuilder.<Unit, String>create()

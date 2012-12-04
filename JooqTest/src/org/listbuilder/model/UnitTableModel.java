@@ -30,7 +30,9 @@ public enum UnitTableModel {
 			unitMap.put(unit.getName(), 1);
 			unitList.add(unit);
 		} else {
-			unitMap.put(unit.getName(), count + 1);
+			count += 1;
+			unitMap.put(unit.getName(), count);
+			unit.setQuantity(count);
 		}		
 	}
 	
