@@ -1,6 +1,8 @@
 package org.listbuilder.ui;
 
-import static org.jooq.h2.generated.Tables.*;
+import static org.jooq.h2.generated.Tables.FACTION;
+import static org.jooq.h2.generated.Tables.TYPE;
+import static org.jooq.h2.generated.Tables.UNIT;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.binding.When;
@@ -49,6 +51,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.ImageViewBuilder;
 import javafx.scene.input.KeyCombination;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPaneBuilder;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.HBoxBuilder;
@@ -81,6 +85,9 @@ public class ListBuilderMain extends Application {
 
 	public ListView<Unit> listView;
 	public TableView<Unit> tableView;
+	
+	private static final int OK = 0;
+	private static final int CANCEL = 1;
 
 	public static void main(String[] args) {
 		if (!Database.isInitialized()) {
@@ -114,7 +121,8 @@ public class ListBuilderMain extends Application {
 		
 		listView.disableProperty().bind(UnitListModel.INSTANCE.queryActive);
 		progressIndicator.visibleProperty()
-						 .bind(UnitListModel.INSTANCE.queryActive);
+						 .bind(UnitListModel.INSTANCE.queryActive);		
+		
 		stage.setScene(scene);
 		stage.setTitle("List Builder");
 		stage.setMinWidth(800);
@@ -155,7 +163,12 @@ public class ListBuilderMain extends Application {
 								.onAction(new EventHandler<ActionEvent>() {
 									@Override
 									public void handle(ActionEvent e) {
-										Platform.exit();
+										ModalDialog confirmDialog = new ModalDialog(ModalDialog.Type.CONFIRM);
+										confirmDialog.setTitleText("Confirm Exit");
+										confirmDialog.setMessageText("Are you sure you want to exit List Builder?");
+										if (confirmDialog.showDialog() == OK) {
+											Platform.exit();
+										}
 									}
 								}).build()).build(),
 						MenuBuilder
@@ -395,7 +408,18 @@ public class ListBuilderMain extends Application {
 			public ListCell<Unit> call(ListView<Unit> list) {
 				ListCell<Unit> unitCell = new UnitListCell();
 				unitCell.setEditable(false);
-				unitCell.setContextMenu(rightClickMenu);
+				unitCell.setOnMouseClicked(new EventHandler<MouseEvent>() {
+					@Override
+					public void handle(MouseEvent event) {
+						System.out.println("Clicked");
+						if (event.getButton() == MouseButton.SECONDARY
+								&& !UnitListModel.INSTANCE.isEmpty()) {
+							System.out.println("Not Empty");
+							rightClickMenu.show(stage, event.getScreenX(),
+									event.getScreenY());
+						}
+					}
+				});
 				return unitCell;
 			}
 		});		
@@ -403,8 +427,8 @@ public class ListBuilderMain extends Application {
 		return listView;
 	}
 	
-	private Node createTableView() {
-				final ContextMenu rightClickMenu = ContextMenuBuilder.create()
+	private Node createTableView() {		
+		final ContextMenu rightClickMenu = ContextMenuBuilder.create()				
 				.items(MenuItemBuilder.create()
 						.text("Remove Unit (Selected)")
 						.onAction(new EventHandler<ActionEvent>() {
@@ -436,7 +460,12 @@ public class ListBuilderMain extends Application {
 						.onAction(new EventHandler<ActionEvent>() {
 							@Override
 							public void handle(ActionEvent event) {
-								UnitTableModel.INSTANCE.removeAllUnits();
+								ModalDialog confirmDialog = new ModalDialog(ModalDialog.Type.CONFIRM);
+								confirmDialog.setTitleText("Confirm Remove All");
+								confirmDialog.setMessageText("This action will remove all units from the list. Are you sure?");
+								if (confirmDialog.showDialog() == OK) {
+									UnitTableModel.INSTANCE.removeAllUnits();									
+								}
 							}
 						})
 						.build(),
@@ -454,13 +483,22 @@ public class ListBuilderMain extends Application {
 							}
 						})
 						.build())
-				.build();
-		
-		tableView = TableViewBuilder.<Unit>create()
+				.build();		
+
+		tableView = TableViewBuilder.<Unit> create()
 				.placeholder(new Label("Add a model to start"))
 				.tableMenuButtonVisible(true)
 				.items(UnitTableModel.INSTANCE.getUnitList())
-				.contextMenu(rightClickMenu)
+				.onMouseClicked(new EventHandler<MouseEvent>() {
+					@Override
+					public void handle(MouseEvent event) {
+						if (event.getButton() == MouseButton.SECONDARY
+								&& !UnitTableModel.INSTANCE.isEmpty()) {
+							rightClickMenu.show(stage, event.getScreenX(),
+									event.getScreenY());
+						}
+					}
+				})
 				.build();
 		
 		TableColumn<Unit, Integer> quantityColumn = TableColumnBuilder.<Unit, Integer>create()

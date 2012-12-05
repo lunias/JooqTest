@@ -1,5 +1,7 @@
 package org.listbuilder.model;
 
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
@@ -14,7 +16,7 @@ public enum UnitTableModel {
 	private final Logger LOG = LoggerFactory.getLogger(UnitTableModel.class);
 	
 	private ObservableMap<String, Integer> unitMap = FXCollections.<String, Integer>observableHashMap();
-	private ObservableList<Unit> unitList = FXCollections.<Unit>observableArrayList();
+	private ObservableList<Unit> unitList = FXCollections.<Unit>observableArrayList();	
 
 	public ObservableMap<String, Integer> getUnitMap() {
 		return unitMap;
@@ -40,7 +42,7 @@ public enum UnitTableModel {
 					localUnit.setQuantity(count);
 				}
 			}
-		}		
+		}
 	}
 	
 	public void removeUnit(Unit unitToRemove) {
@@ -88,6 +90,10 @@ public enum UnitTableModel {
 				pointTotal += unit.getPointValue() * unitMap.get(unit.getName());	
 			}
 		}
+	}
+	
+	public boolean isEmpty() {
+		return unitList.isEmpty();
 	}
 
 }

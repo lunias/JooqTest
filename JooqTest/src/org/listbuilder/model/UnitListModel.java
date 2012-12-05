@@ -186,5 +186,9 @@ public enum UnitListModel {
 	private void updateActivityState() {
 		queryActive.set(queryTask != null);
 	}
+	
+	public boolean isEmpty() {
+		return unitList.isEmpty();
+	}
 
 }
