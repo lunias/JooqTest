@@ -62,10 +62,6 @@ public final class ModalDialog extends Stage {
 	public int showDialog() {
 		populateStage();
 		
-		if (buttonCount == 0) {
-			addOKButton();
-		}
-		
 		stage.setResizable(false);
 		stage.sizeToScene();
 		stage.centerOnScreen();
@@ -83,6 +79,7 @@ public final class ModalDialog extends Stage {
 			break;
 		default:
 			icon = "img/search.png";
+			addOKButton();
 		}
 		
 		try {
@@ -110,7 +107,7 @@ public final class ModalDialog extends Stage {
 		List<String> labels = new ArrayList<>(1);
 		labels.add("OK");
 		
-		addButtons(labels, 0, 0);
+		addButtons(labels);
 	}
 	
 	private void addOKCancelButtons() {

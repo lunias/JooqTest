@@ -6,13 +6,18 @@ import static org.jooq.h2.generated.Tables.UNIT;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.binding.When;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Side;
 import javafx.scene.Cursor;
 import javafx.scene.GroupBuilder;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.SceneBuilder;
+import javafx.scene.chart.PieChart;
+import javafx.scene.chart.PieChartBuilder;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBuilder;
 import javafx.scene.control.CheckMenuItemBuilder;
@@ -88,6 +93,7 @@ public class ListBuilderMain extends Application {
 
 	public ListView<Unit> listView;
 	public TableView<Unit> tableView;
+	public HBox infoArea;
 	
 	private static final int OK = 0;
 	private static final int CANCEL = 1;
@@ -116,7 +122,7 @@ public class ListBuilderMain extends Application {
 						.left(createListView())
 						.center(VBoxBuilder.create()
 								.spacing(5)
-								.children(createTableView())
+								.children(createTableView(), createInfoArea())
 								.build())
 						.build())
 				.build();
@@ -190,7 +196,14 @@ public class ListBuilderMain extends Application {
 										.onAction(new EventHandler<ActionEvent>() {
 											@Override
 											public void handle(ActionEvent e) {
-												Database.exportDatabase();
+												ModalDialog infoDialog = new ModalDialog();
+												infoDialog.setTitleText("Database Export");												
+												if (!Database.exportDatabase()) {
+													infoDialog.setMessageText("An error was encountered exporting the database. Please check the database connection.");													
+												} else {
+													infoDialog.setMessageText("Database exported to 'scripts/dump.sql'.");												
+												}
+												infoDialog.showDialog();
 											}
 										})
 										.build(),
@@ -337,7 +350,7 @@ public class ListBuilderMain extends Application {
 						strut,
 						currentItemLabel = LabelBuilder.create()
 						.id("titleLabel")
-						.text("List Builder")
+						.text("New List")
 						.build(),
 						spring,
 						GroupBuilder.create()
@@ -542,6 +555,32 @@ public class ListBuilderMain extends Application {
 		tableView.getColumns().addAll(quantityColumn, factionColumn, typeColumn, nameColumn, pointColumn);
 		
 		return tableView;
+	}
+	
+	private Node createInfoArea() {
+		
+		ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(
+				new PieChart.Data("Points Allocated", 0),
+				new PieChart.Data("Points Free", 30));
+		
+		ObservableList<PieChart.Data> pieChartData2 = FXCollections.observableArrayList(
+				new PieChart.Data("Ranged", 3),
+				new PieChart.Data("Melee", 9),
+				new PieChart.Data("Support", 2));
+				
+		infoArea = HBoxBuilder.create()
+				.spacing(5)
+				.children(PieChartBuilder.create()
+						.legendSide(Side.TOP)
+						.data(pieChartData)
+						.build(),
+						PieChartBuilder.create()						
+						.legendSide(Side.TOP)
+						.data(pieChartData2)						
+						.build())						
+				.build();		
+		
+		return infoArea;
 	}
 
 }

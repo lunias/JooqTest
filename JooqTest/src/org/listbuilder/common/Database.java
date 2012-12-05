@@ -80,12 +80,14 @@ public class Database {
 		}
 	}
 	
-	public static void exportDatabase() {
+	public static boolean exportDatabase() {
 		try {
 			Script.execute(URL, USERNAME, PASSWORD, "scripts/dump.sql");
 		} catch (SQLException sqle) {
 			LOG.error("Could not export database; sql exception occured", sqle);
+			return false;
 		}
+		return true;
 	}
 	
 	public static void dispose() {
