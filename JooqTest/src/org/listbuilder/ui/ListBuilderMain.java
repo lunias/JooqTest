@@ -14,6 +14,8 @@ import javafx.scene.SceneBuilder;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBuilder;
 import javafx.scene.control.CheckMenuItemBuilder;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.ContextMenuBuilder;
 import javafx.scene.control.Label;
 import javafx.scene.control.LabelBuilder;
 import javafx.scene.control.ListCell;
@@ -28,6 +30,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.MenuItemBuilder;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.ProgressIndicatorBuilder;
+import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.RadioMenuItemBuilder;
 import javafx.scene.control.SeparatorMenuItemBuilder;
 import javafx.scene.control.TableColumn;
@@ -55,7 +58,6 @@ import javafx.scene.layout.VBoxBuilder;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
-import org.jooq.h2.generated.tables.Faction;
 import org.listbuilder.common.Database;
 import org.listbuilder.model.Unit;
 import org.listbuilder.model.UnitListModel;
@@ -73,7 +75,9 @@ public class ListBuilderMain extends Application {
 	Tooltip searchTooltip;
 	Button searchButton;
 	Label currentItemLabel;
-	ProgressIndicator progressIndicator;		
+	ProgressIndicator progressIndicator;
+	
+	RadioMenuItem andRadioItem;
 
 	public ListView<Unit> listView;
 	public TableView<Unit> tableView;
@@ -100,7 +104,11 @@ public class ListBuilderMain extends Application {
 								.children(createMenuBar(), createToolBar())
 								.build())
 						.left(createListView())
-						.center(createTableView()).build())
+						.center(VBoxBuilder.create()
+								.spacing(5)
+								.children(createTableView())
+								.build())
+						.build())
 				.build();
 
 		
@@ -182,6 +190,16 @@ public class ListBuilderMain extends Application {
 								).build(),
 						MenuBuilder
 								.create()
+								.text("_Options")
+								.items(CheckMenuItemBuilder.create()
+										.text("Allow Reinforcements")
+										.build(),
+										CheckMenuItemBuilder.create()
+										.text("Freestyle Factions")
+										.build())
+								.build(),
+						MenuBuilder
+								.create()
 								.text("_Help")
 								.items(MenuItemBuilder.create().text("About")
 										.build()).build()).build();
@@ -253,31 +271,26 @@ public class ListBuilderMain extends Application {
 								.build(),
 								MenuBuilder.create()
 								.text("Search Operator")
-								.items(RadioMenuItemBuilder.create()
+								.items(andRadioItem = RadioMenuItemBuilder.create()
 										.text("AND")										
 										.toggleGroup(toggleGroup)
-										.onAction(new EventHandler<ActionEvent>() {
-											@Override
-											public void handle(ActionEvent e) {	
-												System.out.println("CLICKED AND");
-												UnitListModel.INSTANCE.toggleSearchAnd();
-											}
-										})
 										.build(),
 										RadioMenuItemBuilder.create()
 										.selected(true)
 										.text("OR")
 										.toggleGroup(toggleGroup)
-										.onAction(new EventHandler<ActionEvent>() {
-											@Override
-											public void handle(ActionEvent e) {												
-												System.out.println("CLICKED OR");
-												UnitListModel.INSTANCE.toggleSearchAnd();
-											}
-										})
 										.build())
-								.build()
-								)
+								.build(),
+								CheckMenuItemBuilder.create()
+								.text("Faction Lock")
+								.selected(true)
+								.onAction(new EventHandler<ActionEvent>() {
+									@Override
+									public void handle(ActionEvent event) {
+										System.out.println("Faction lock click");
+									}							
+								})
+								.build())
 						.build(),
 						HBoxBuilder.create()
 						.spacing(5)
@@ -331,6 +344,8 @@ public class ListBuilderMain extends Application {
 		
 		searchTooltip.textProperty().bind(UnitListModel.INSTANCE.searchColumns);
 		
+		andRadioItem.selectedProperty().bindBidirectional(UnitListModel.INSTANCE.andOperator);
+		
 		strut.setPrefWidth(300);
 		strut.setMinWidth(Region.USE_PREF_SIZE);
 		strut.setMaxWidth(Region.USE_PREF_SIZE);
@@ -340,6 +355,35 @@ public class ListBuilderMain extends Application {
 	}
 
 	private Node createListView() {
+		final ContextMenu rightClickMenu = ContextMenuBuilder.create()
+				.items(MenuItemBuilder.create()
+						.text("Add Unit")
+						.onAction(new EventHandler<ActionEvent>() {
+							@Override
+							public void handle(ActionEvent event) {
+								Unit selected = listView.getSelectionModel().getSelectedItem();
+								if (selected != null) {
+									UnitTableModel.INSTANCE.addUnit(selected);
+								}
+							}							
+						})
+						.build(),
+						SeparatorMenuItemBuilder.create()
+						.build(),
+						MenuItemBuilder.create()
+						.text("Unit Details")
+						.onAction(new EventHandler<ActionEvent>() {
+							@Override
+							public void handle(ActionEvent event) {
+								Unit selected = listView.getSelectionModel().getSelectedItem();
+								if (selected != null) {
+									System.out.println("Unit Details");
+								}
+							}
+						})
+						.build())
+				.build();
+		
 		listView = ListViewBuilder.<Unit> create()
 				.items(UnitListModel.INSTANCE.getUnitList())
 				.editable(false)
@@ -351,18 +395,72 @@ public class ListBuilderMain extends Application {
 			public ListCell<Unit> call(ListView<Unit> list) {
 				ListCell<Unit> unitCell = new UnitListCell();
 				unitCell.setEditable(false);
+				unitCell.setContextMenu(rightClickMenu);
 				return unitCell;
 			}
-		});
+		});		
 
 		return listView;
 	}
 	
 	private Node createTableView() {
+				final ContextMenu rightClickMenu = ContextMenuBuilder.create()
+				.items(MenuItemBuilder.create()
+						.text("Remove Unit (Selected)")
+						.onAction(new EventHandler<ActionEvent>() {
+							@Override
+							public void handle(ActionEvent event) {
+								Unit selected = tableView.getSelectionModel().getSelectedItem();
+								if (selected != null) {
+									UnitTableModel.INSTANCE.removeUnit(selected);
+								}
+							}							
+						})
+						.build(),
+						MenuItemBuilder.create()
+						.text("Remove All (Selected)")
+						.onAction(new EventHandler<ActionEvent>() {
+							@Override
+							public void handle(ActionEvent event) {
+								Unit selected = tableView.getSelectionModel().getSelectedItem();
+								if (selected != null) {
+									UnitTableModel.INSTANCE.completeRemoveUnit(selected);
+								}
+							}
+						})
+						.build(),
+						SeparatorMenuItemBuilder.create()
+						.build(),
+						MenuItemBuilder.create()
+						.text("Remove All")
+						.onAction(new EventHandler<ActionEvent>() {
+							@Override
+							public void handle(ActionEvent event) {
+								UnitTableModel.INSTANCE.removeAllUnits();
+							}
+						})
+						.build(),
+						SeparatorMenuItemBuilder.create()
+						.build(),
+						MenuItemBuilder.create()
+						.text("Unit Details")
+						.onAction(new EventHandler<ActionEvent>() {
+							@Override
+							public void handle(ActionEvent event) {
+								Unit selected = tableView.getSelectionModel().getSelectedItem();
+								if (selected != null) {
+									System.out.println("Unit Details for " + selected.getName());
+								}
+							}
+						})
+						.build())
+				.build();
+		
 		tableView = TableViewBuilder.<Unit>create()
 				.placeholder(new Label("Add a model to start"))
 				.tableMenuButtonVisible(true)
 				.items(UnitTableModel.INSTANCE.getUnitList())
+				.contextMenu(rightClickMenu)
 				.build();
 		
 		TableColumn<Unit, Integer> quantityColumn = TableColumnBuilder.<Unit, Integer>create()

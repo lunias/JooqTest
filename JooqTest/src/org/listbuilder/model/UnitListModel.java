@@ -13,6 +13,8 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
@@ -39,23 +41,25 @@ public enum UnitListModel {
 	public BooleanProperty queryActive = new SimpleBooleanProperty(false);
 	public StringProperty searchColumns = new SimpleStringProperty(
 			"Search on (OR) NAME");
+	public BooleanProperty andOperator = new SimpleBooleanProperty(); 
 
 	private ObservableList<Unit> unitList = FXCollections.<Unit> observableArrayList();
-	private Map<TableField<? extends Record, ?>, Boolean> searchMap = new HashMap<TableField<? extends Record, ?>, Boolean>();
-	
-	private boolean searchAnd = false;
+	private Map<TableField<? extends Record, ?>, Boolean> searchMap = new HashMap<TableField<? extends Record, ?>, Boolean>();	
 
 	private UnitListModel() {
 		searchMap.put(UNIT.NAME, true);
+		
+		andOperator.addListener(new ChangeListener<Boolean>() {
+			@Override
+			public void changed(ObservableValue<? extends Boolean> observable,
+					Boolean oldValue, Boolean newValue) {
+				updateSearchColumns();
+			}			
+		});
 	}
 
 	public ObservableList<Unit> getUnitList() {
 		return unitList;
-	}
-
-	public void toggleSearchAnd() {
-		searchAnd = !searchAnd;
-		updateSearchColumns();
 	}
 	
 	public void toggleSearchOnColumn(TableField<? extends Record, ?> field) {
@@ -69,7 +73,7 @@ public enum UnitListModel {
 
 	public void updateSearchColumns() {
 		String sReturn = "Search on ";
-		if (searchAnd) {
+		if (andOperator.get()) {
 			sReturn += "(AND) ";
 		} else {
 			sReturn += "(OR) ";
@@ -96,7 +100,7 @@ public enum UnitListModel {
  						Factory db = new H2Factory(conn);
  
  						Operator operator;
- 						if (searchAnd) {
+ 						if (andOperator.get()) {
  							operator = Operator.AND; 							
  						} else {
  							operator = Operator.OR;

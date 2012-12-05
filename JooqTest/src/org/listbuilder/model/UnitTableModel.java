@@ -24,16 +24,49 @@ public enum UnitTableModel {
 		return unitList;
 	}
 	
-	public void addUnit(Unit unit) {
-		Integer count = unitMap.get(unit.getName());
+	public void addUnit(Unit addedUnit) {
+		String name = addedUnit.getName();
+		Integer count = unitMap.get(name);
+		
 		if (count == null) {
-			unitMap.put(unit.getName(), 1);
-			unitList.add(unit);
+			unitMap.put(name, 1);
+			unitList.add(addedUnit);
 		} else {
 			count += 1;
-			unitMap.put(unit.getName(), count);
-			unit.setQuantity(count);
+			unitMap.put(name, count);
+			// must update quantity of unitList object
+			for (Unit localUnit : unitList) {
+				if (localUnit.getName().equals(name)) {
+					localUnit.setQuantity(count);
+				}
+			}
 		}		
+	}
+	
+	public void removeUnit(Unit unitToRemove) {
+		String name = unitToRemove.getName();
+		int count = getUnitQuantityByName(name) - 1;
+		
+		if (count > 0) {
+			unitMap.put(name, count);			
+			unitToRemove.setQuantity(count);
+		} else {
+			completeRemoveUnit(unitToRemove);
+		}
+	}
+	
+	public void completeRemoveUnit(Unit unitToRemove) {
+		unitMap.remove(unitToRemove.getName());
+		unitList.remove(unitToRemove);
+		unitToRemove.setQuantity(1);
+	}
+	
+	public void removeAllUnits() {
+		for (Unit unit : unitList) {
+			unit.setQuantity(1);
+		}
+		unitList.clear();
+		unitMap.clear();
 	}
 	
 	public int getUnitQuantityByName(String name) {
@@ -42,6 +75,19 @@ public enum UnitTableModel {
 			return 0;
 		}
 		return unitMap.get(name);
+	}
+	
+	public void updatePointTotals() {
+		int pointTotal = 0;
+		int warjackPointTotal = 0;
+		
+		for (Unit unit : unitList) {
+			if (unit.getPointValue() < 0) {
+				warjackPointTotal += unit.getPointValue() * unitMap.get(unit.getName());
+			} else {
+				pointTotal += unit.getPointValue() * unitMap.get(unit.getName());	
+			}
+		}
 	}
 
 }

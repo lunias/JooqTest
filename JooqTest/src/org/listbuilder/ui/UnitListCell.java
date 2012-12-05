@@ -2,9 +2,11 @@ package org.listbuilder.ui;
 
 import javafx.event.EventHandler;
 import javafx.scene.Node;
+import javafx.scene.control.ContextMenuBuilder;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.MenuItemBuilder;
 import javafx.scene.control.Tooltip;
 import javafx.scene.control.TooltipBuilder;
 import javafx.scene.input.MouseButton;
