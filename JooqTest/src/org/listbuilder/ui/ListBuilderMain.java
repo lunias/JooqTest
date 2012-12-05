@@ -82,6 +82,9 @@ public class ListBuilderMain extends Application {
 	ProgressIndicator progressIndicator;
 	
 	RadioMenuItem andRadioItem;
+	
+	MenuItem removeUnitSelectedItem;
+	MenuItem removeAllSelectedItem;
 
 	public ListView<Unit> listView;
 	public TableView<Unit> tableView;
@@ -411,10 +414,8 @@ public class ListBuilderMain extends Application {
 				unitCell.setOnMouseClicked(new EventHandler<MouseEvent>() {
 					@Override
 					public void handle(MouseEvent event) {
-						System.out.println("Clicked");
 						if (event.getButton() == MouseButton.SECONDARY
 								&& !UnitListModel.INSTANCE.isEmpty()) {
-							System.out.println("Not Empty");
 							rightClickMenu.show(stage, event.getScreenX(),
 									event.getScreenY());
 						}
@@ -429,8 +430,8 @@ public class ListBuilderMain extends Application {
 	
 	private Node createTableView() {		
 		final ContextMenu rightClickMenu = ContextMenuBuilder.create()				
-				.items(MenuItemBuilder.create()
-						.text("Remove Unit (Selected)")
+				.items(removeUnitSelectedItem = MenuItemBuilder.create()
+						.text("Remove Unit (Selected)")	
 						.onAction(new EventHandler<ActionEvent>() {
 							@Override
 							public void handle(ActionEvent event) {
@@ -441,7 +442,7 @@ public class ListBuilderMain extends Application {
 							}							
 						})
 						.build(),
-						MenuItemBuilder.create()
+						removeAllSelectedItem = MenuItemBuilder.create()
 						.text("Remove All (Selected)")
 						.onAction(new EventHandler<ActionEvent>() {
 							@Override
@@ -487,7 +488,7 @@ public class ListBuilderMain extends Application {
 
 		tableView = TableViewBuilder.<Unit> create()
 				.placeholder(new Label("Add a model to start"))
-				.tableMenuButtonVisible(true)
+				//.tableMenuButtonVisible(true)
 				.items(UnitTableModel.INSTANCE.getUnitList())
 				.onMouseClicked(new EventHandler<MouseEvent>() {
 					@Override
@@ -496,6 +497,13 @@ public class ListBuilderMain extends Application {
 								&& !UnitTableModel.INSTANCE.isEmpty()) {
 							rightClickMenu.show(stage, event.getScreenX(),
 									event.getScreenY());
+						} else if (event.getButton() == MouseButton.PRIMARY) {
+							if(event.getClickCount() == 2){
+								Unit selected = tableView.getSelectionModel().getSelectedItem();
+								if (selected != null) {
+									UnitTableModel.INSTANCE.removeUnit(selected);									
+								}
+							}
 						}
 					}
 				})
